@@ -1,0 +1,42 @@
+{
+    "name": "weezqyd/vultr-php",
+    "description": "Vultr PHP API client,",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Master Weez",
+            "email": "wizqydy@gmail.com"
+        }
+    ],
+    "support": {
+        "issues": "https://github.com/weezqyd/vultr-php/issues",
+        "source": "https://github.com/weezqyd/vultr-php"
+    },
+
+    "require": {
+        "php": ">=5.4.0"
+    },
+
+    "require-dev": {
+        "kriswallsmith/buzz"        : "~0.10",
+        "guzzlehttp/guzzle"         : "~5.0|~6.0",
+        "phpspec/phpspec"           : "~2.4",
+        "friendsofphp/php-cs-fixer" : "~1.11"
+    },
+
+    "suggest": {
+        "kriswallsmith/buzz": "To use BuzzAdapter, require kriswallsmith/buzz:~0.10.",
+        "guzzlehttp/guzzle" : "To use GuzzleHttpAdapter, require guzzlehttp/guzzle:~5.0|~6.0."
+    },
+
+    "autoload": {
+        "psr-4": {
+            "Vultr\\": "src/"
+        }
+    },
+
+    "config": {
+        "preferred-install": "dist"
+    }
+}
