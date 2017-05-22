@@ -19,6 +19,10 @@ use Vultr\Entity\Account as AccountEntity;
 class Account extends AbstractApi
 {
     /**
+     * Retrieve information about the current account.
+     *
+     * @see https://www.vultr.com/api/#account
+     *
      * @return AccountEntity
      */
     public function getUserInformation()

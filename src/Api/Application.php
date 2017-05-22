@@ -19,6 +19,11 @@ use Vultr\Entity\Application as ApplicationEntity;
 class Application extends AbstractApi
 {
     /**
+     * Retrieve a list of available applications.
+     * These refer to applications that can be launched when creating a Vultr VPS.
+     *
+     * @see https://www.vultr.com/api/#app_app_list
+     *
      * @return ApplicationEntity
      */
     public function getAll()
