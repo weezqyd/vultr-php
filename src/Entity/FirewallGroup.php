@@ -14,12 +14,32 @@ namespace Vultr\Entity;
 /**
  * @author Albert Leitato <wizqydy@gmail.com>
  */
-final class Domain extends AbstractEntity
+final class FirewallGroup extends AbstractEntity
 {
+    /**
+     * @var int
+     */
+    public $FIREWALLGROUPID;
+
     /**
      * @var string
      */
-    public $name;
+    public $description;
+
+    /**
+     * @var int
+     */
+    public $instance_count;
+
+    /**
+     * @var int
+     */
+    public $rule_count;
+
+    /**
+     * @var string
+     */
+    public $date_modified;
 
     /**
      * @var string
@@ -27,10 +47,7 @@ final class Domain extends AbstractEntity
     public $date_created;
 
     /**
-     * @param string $createdAt
+     * @var int
      */
-    public function setCreatedAt($createdAt)
-    {
-        $this->date_created = static::convertDateTime($createdAt);
-    }
+    public $max_rule_count;
 }

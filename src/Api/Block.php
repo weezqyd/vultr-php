@@ -24,12 +24,10 @@ class Block extends AbstractApi
      * @see https://www.vultr.com/api/#block_block_list
      *
      * @return BlockEntity
-     *
-     * @param int $sub_id Filter result set to only contain backups of this subscription object
      */
-    public function getAll($subid = null)
+    public function getAll()
     {
-        $blocks = $this->adapter->get(sprintf('%s/block/list?SUBID=%d', $this->endpoint, $subid));
+        $blocks = $this->adapter->get(sprintf('%s/block/list', $this->endpoint));
 
         $blocks = json_decode($blocks);
         $this->extractMeta($blocks);
@@ -37,6 +35,23 @@ class Block extends AbstractApi
         return array_map(function ($block) {
             return new BlockEntity($block);
         }, $blocks);
+    }
+
+    /**
+     * Retrieve a list of any active block storage subscriptions on this account.
+     *
+     * @see https://www.vultr.com/api/#block_block_list
+     *
+     * @return BlockEntity
+     *
+     * @param int $subId Id for the Block storage
+     */
+    public function getById($subId)
+    {
+        $response = $this->adapter->get(sprintf('%s/block/list?SUBID=%d', $this->endpoint, $subId));
+        $blocks = json_decode($response);
+
+        return new BlockEntity($blocks[0]);
     }
 
     /**
@@ -71,7 +86,7 @@ class Block extends AbstractApi
      */
     public function delete($subid)
     {
-        $this->adapter->post(sprintf('%s/block/delete', $this->endpoint, ['SUBID' => $subid]));
+        $this->adapter->post(sprintf('%s/block/delete', $this->endpoint), ['SUBID' => $subid]);
     }
 
     /**
@@ -83,7 +98,7 @@ class Block extends AbstractApi
      */
     public function detach($subid)
     {
-        $this->adapter->post(sprintf('%s/block/detach', $this->endpoint, ['SUBID' => $subid]));
+        $this->adapter->post(sprintf('%s/block/detach', $this->endpoint), ['SUBID' => $subid]);
     }
 
     /**
@@ -100,6 +115,27 @@ class Block extends AbstractApi
             'SUBID' => $subid,
             'label' => $label,
         ];
-        $this->adapter->post(sprintf('%s/block/label_set', $this->endpoint, $data));
+        $this->adapter->post(sprintf('%s/block/label_set', $this->endpoint), $data);
+    }
+
+    /**
+     * Resize the block storage volume to a new size.
+     *
+     * WARNING: When shrinking the volume,
+     * you must manually shrink the filesystem and partitions beforehand,
+     * or you will lose data.
+     *
+     * @param int    $subid ID of the block storage subscription to resize
+     * @param string $size  New size (in GB) of the block storage subscription
+     *
+     * @throws HttpException
+     */
+    public function resize($subid, $size)
+    {
+        $data = [
+            'SUBID' => $subid,
+            'size_gb' => $size,
+        ];
+        $this->adapter->post(sprintf('%s/block/resize', $this->endpoint), $data);
     }
 }

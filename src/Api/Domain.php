@@ -1,31 +1,32 @@
 <?php
 
 /*
- * This file is part of the DigitalOceanV2 library.
+ * This file is part of the Vultr PHP library.
  *
- * (c) Antoine Corcy <contact@sbin.dk>
+ * (c) Albert Leitato <wizqydy@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace DigitalOceanV2\Api;
+namespace Vultr\Api;
 
-use DigitalOceanV2\Entity\Domain as DomainEntity;
-use DigitalOceanV2\Exception\HttpException;
+use Vultr\Entity\Domain as DomainEntity;
+use Vultr\Exceptions\HttpException;
 
 /**
- * @author Yassir Hannoun <yassir.hannoun@gmail.com>
- * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 class Domain extends AbstractApi
 {
     /**
+     * List all domains associated with the current account.
+     *
      * @return DomainEntity[]
      */
     public function getAll()
     {
-        $domains = $this->adapter->get(sprintf('%s/domains?per_page=%d', $this->endpoint, 200));
+        $domains = $this->adapter->get(sprintf('%s/dns/list', $this->endpoint));
 
         $domains = json_decode($domains);
 
@@ -37,24 +38,10 @@ class Domain extends AbstractApi
     }
 
     /**
-     * @param string $domainName
+     * Create a domain name in DNS.
      *
-     * @throws HttpException
-     *
-     * @return DomainEntity
-     */
-    public function getByName($domainName)
-    {
-        $domain = $this->adapter->get(sprintf('%s/domains/%s', $this->endpoint, $domainName));
-
-        $domain = json_decode($domain);
-
-        return new DomainEntity($domain->domain);
-    }
-
-    /**
-     * @param string $name
-     * @param string $ipAddress
+     * @param string $name      Domain name to create
+     * @param string $ipAddress IP to use when creating default records (A and MX)
      *
      * @throws HttpException
      *
@@ -62,9 +49,9 @@ class Domain extends AbstractApi
      */
     public function create($name, $ipAddress)
     {
-        $content = ['name' => $name, 'ip_address' => $ipAddress];
+        $content = ['name' => $name, 'serverip' => $ipAddress];
 
-        $domain = $this->adapter->post(sprintf('%s/domains', $this->endpoint), $content);
+        $domain = $this->adapter->post(sprintf('%s/dns/create_domain', $this->endpoint), $content);
 
         $domain = json_decode($domain);
 
@@ -72,12 +59,14 @@ class Domain extends AbstractApi
     }
 
     /**
-     * @param string $domain
+     * Delete a domain name and all associated records.
+     *
+     * @param string $domain Domain name to delete
      *
      * @throws HttpException
      */
     public function delete($domain)
     {
-        $this->adapter->delete(sprintf('%s/domains/%s', $this->endpoint, $domain));
+        $this->adapter->post(sprintf('%s/dns/delete_domain', $this->endpoint), compact('domain'));
     }
 }
