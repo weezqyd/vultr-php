@@ -21,15 +21,22 @@ final class Account extends AbstractEntity
     /**
      * @var float
      */
-    public $pending_charges;
+    public $pendingCharges;
 
     /**
      * @var string
      */
-    public $last_payment_date;
+    public $lastPaymentDate;
 
     /**
      * @var float
      */
-    public $last_payment_amount;
+    public $lastPaymentAmount;
+
+    /**
+     *  @var array Date attributes on this entity
+     */
+    protected $dates = [
+        'last_payment_date',
+    ];
 }

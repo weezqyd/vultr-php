@@ -24,13 +24,12 @@ final class Domain extends AbstractEntity
     /**
      * @var string
      */
-    public $date_created;
+    public $dateCreated;
 
     /**
-     * @param string $createdAt
+     * @var array Date attributes on this entity
      */
-    public function setCreatedAt($createdAt)
-    {
-        $this->date_created = static::convertDateTime($createdAt);
-    }
+    protected $dates = [
+        'date_created',
+    ];
 }

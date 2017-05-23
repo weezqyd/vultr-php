@@ -16,12 +16,12 @@ final class Backup extends AbstractEntity
     /**
      * @var string
      */
-    public $BACKUPID;
+    public $backupid;
 
     /**
      * @var string
      */
-    public $date_created;
+    public $dateCreated;
 
     /**
      * @var string
@@ -39,10 +39,9 @@ final class Backup extends AbstractEntity
     public $size;
 
     /**
-     * @param string $createdAt
+     * @var array Date attributes on this entity
      */
-    public function setCreatedAt($createdAt)
-    {
-        $this->date_created = static::convertDateTime($createdAt);
-    }
+    protected $dates = [
+        'date_created',
+    ];
 }

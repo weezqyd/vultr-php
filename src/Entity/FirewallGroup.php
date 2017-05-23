@@ -19,7 +19,7 @@ final class FirewallGroup extends AbstractEntity
     /**
      * @var int
      */
-    public $FIREWALLGROUPID;
+    public $firewallgroupid;
 
     /**
      * @var string
@@ -29,25 +29,33 @@ final class FirewallGroup extends AbstractEntity
     /**
      * @var int
      */
-    public $instance_count;
+    public $instanceCount;
 
     /**
      * @var int
      */
-    public $rule_count;
+    public $ruleCount;
 
     /**
      * @var string
      */
-    public $date_modified;
+    public $dateModified;
 
     /**
      * @var string
      */
-    public $date_created;
+    public $dateCreated;
 
     /**
      * @var int
      */
-    public $max_rule_count;
+    public $maxRuleCount;
+
+    /**
+     * @var array Date attributes on this entity
+     */
+    protected $dates = [
+        'date_created',
+        'date_modified',
+    ];
 }

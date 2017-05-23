@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the Vultr PHP library.
  *
@@ -10,25 +11,43 @@
 
 namespace Vultr\Entity;
 
-final class Application extends AbstractEntity
+/**
+ * @author Albert Leitato <wizqydy@gmail.com>
+ */
+final class FirewallRule extends AbstractEntity
 {
     /**
-     * @var int
+     * @var string
      */
-    public $appid;
+    public $firewallgroupid;
 
     /**
      * @var string
      */
-    public $shortName;
-
-    /**
-     * @var string
-     */
-    public $deployName;
+    public $direction;
 
     /**
      * @var int
      */
-    public $surcharge;
+    public $rulenumber;
+
+    /**
+     * @var string
+     */
+    public $ipType;
+
+    /**
+     * @var string
+     */
+    public $subnet;
+
+    /**
+     * @var int
+     */
+    public $subnetSize;
+
+    /**
+     * @var int|string
+     */
+    public $port;
 }

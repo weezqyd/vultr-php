@@ -45,6 +45,12 @@ abstract class AbstractEntity
                 $this->$property = $value;
             }
         }
+        if (property_exists($this, 'dates')) {
+            foreach ($this->dates as $value) {
+                $property = static::convertToCamelCase($value);
+                $this->$property = static::convertDateTime($this->$property);
+            }
+        }
     }
 
     /**

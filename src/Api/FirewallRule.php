@@ -12,7 +12,6 @@
 namespace Vultr\Api;
 
 use Vultr\Entity\FirewallRule as FirewallRuleEntity;
-use Vultr\Exceptions\EntityNotFoundException;
 
 /**
  * @author Albert Leitato <wizqydy@gmail.com>
@@ -20,15 +19,16 @@ use Vultr\Exceptions\EntityNotFoundException;
 class FirewallRule extends AbstractApi
 {
     /**
-     * List all firewall groups on the current account.
+     * List all firewall rules on the current account.
      *
-     * @see https://www.vultr.com/api/#firewall_group_list
+     * @see https://www.vultr.com/api/#firewall_rule_list
      *
      * @return FirewallRuleEntity
      */
-    public function getAll()
+    public function list($groupId, $direction, $ipType)
     {
-        $response = $this->getAny();
+        $params = 'FIREWALLGROUPID=%s&direction=%s&ip_type=%s';
+        $response = $this->adapter->get(sprintf('%s/firewall/rule_list'.$params, $this->endpoint, $groupId, $direction, $ipType));
 
         $groups = json_decode($response);
         $this->extractMeta($groups);
@@ -39,89 +39,51 @@ class FirewallRule extends AbstractApi
     }
 
     /**
-     * Get a firewall group by its id.
+     * Create a rule in a firewall group.
      *
-     * @param string $groupId ID for the firewall group
+     * @param string $groupId    Target firewall group
+     * @param string $direction  Direction of rule. Possible values: "in".
+     * @param string $ipType     IP address type. Possible values: "v4", "v6".
+     * @param string $protocol   Protocol type. Possible
+     * @param string $subnet     IP address representing a subnet
+     * @param int    $subnetSize iP prefix size in bits
+     * @param string $port       tCP/UDP only
      *
-     * @return FirewallRuleEntity
-     *
-     * @throws EntityNotFoundException
-     **/
-    public function getById($groupId)
+     * @throws HttpException
+     */
+    public function create(string $groupId, string $direction, string $ipType, string $protocol, string $subnet, int $subnetSize, $port = null)
     {
-        $response = $this->getAny($groupId);
-        $object = json_decode($response);
-        try {
-            $group = $object->$groupId;
-        } catch (\Exception $e) {
-            throw new EntityNotFoundException($e->getMessage());
+        $content = [
+            'FIREWALLGROUPID' => $groupId,
+            'direction' => $direction,
+            'ip_type' => $ipType,
+            'protocol' => $protocol,
+            'subnet' => $subnet,
+            'subnet_size' => $subnetSize,
+        ];
+        if (null !== $port) {
+            $content['port'] = $port;
         }
 
-        return new FirewallRuleEntity($group);
+        $response = $this->adapter->post(sprintf('%s/firewall/rule_create', $this->endpoint), $content);
+
+        return json_decode($response);
     }
 
     /**
-     * Get a firewall group by its id.
+     * Delete a rule in a firewall group.
      *
-     * @param string $groupId ID for the firewall group
-     *
-     * @return string API response
-     */
-    protected function getAny($groupId = null)
-    {
-        $params = null !== $groupId ? '?FIREWALLGROUPID=%s' : '';
-
-        return $this->adapter->get(sprintf('%s/firewall/group_list'.$params, $this->endpoint, $groupId));
-    }
-
-    /**
-     * Create a new firewall group on the current account.
-     *
-     * @param string $description Description of firewall group
-     *
-     * @return FirewallRuleEntity
-     **/
-    public function create($description = null)
-    {
-        $response = $this->adapter->post(sprintf('%s/firewall/group_create', $this->endpoint), compact('description'));
-        $object = json_decode($response);
-
-        return $this->getById($object->FIREWALLGROUPID);
-    }
-
-    /**
-     * Change the description on a firewall group.
-     *
-     * @param string $groupId     Firewall group to update
-     * @param string $description Description of firewall group
+     * @param string $groupId    Firewall group to delete
+     * @param int    $ruleNumber Rule number to delete
      *
      * @throws HttpException
      */
-    public function setDescription($groupId, $description)
+    public function delete($groupId, $ruleNumber)
     {
         $data = [
             'FIREWALLGROUPID' => $groupId,
-            'description' => $description,
+            'rulenumber' => $ruleNumber,
         ];
-        $this->adapter->post(sprintf('%s/firewall/group_set_description', $this->endpoint), $data);
-    }
-
-    /**
-     * Delete a firewall group.
-     *
-     * Use this function with caution because the firewall group being deleted
-     * will be detached from all servers. This can result in open ports accessible
-     * to the internet
-     *
-     * @param string $groupId Firewall group to delete
-     *
-     * @throws HttpException
-     */
-    public function delete($groupId)
-    {
-        $data = [
-            'FIREWALLGROUPID' => $groupId,
-        ];
-        $this->adapter->post(sprintf('%s/firewall/group_delete', $this->endpoint), $data);
+        $this->adapter->post(sprintf('%s/firewall/rule_delete', $this->endpoint), $data);
     }
 }

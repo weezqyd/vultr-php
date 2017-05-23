@@ -19,7 +19,7 @@ final class DomainRecord extends AbstractEntity
     /**
      * @var int
      */
-    public $RECORDID;
+    public $recordid;
 
     /**
      * @var string
