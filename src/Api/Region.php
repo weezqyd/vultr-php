@@ -1,30 +1,29 @@
 <?php
 
 /*
- * This file is part of the DigitalOceanV2 library.
+ * This file is part of the Vultr PHP library.
  *
- * (c) Antoine Corcy <contact@sbin.dk>
+ * (c) Albert Leitato <wizqydy@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
 
-namespace DigitalOceanV2\Api;
+namespace Vultr\Api;
 
-use DigitalOceanV2\Entity\Region as RegionEntity;
+use Vultr\Entity\Region as RegionEntity;
 
 /**
- * @author Yassir Hannoun <yassir.hannoun@gmail.com>
- * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 class Region extends AbstractApi
 {
     /**
      * @return RegionEntity[]
      */
-    public function getAll()
+    public function list($availability = null)
     {
-        $regions = $this->adapter->get(sprintf('%s/regions?per_page=%d', $this->endpoint, 200));
+        $regions = $this->adapter->get(sprintf('%s/regions/list?availability=%d', $this->endpoint, $availability));
 
         $regions = json_decode($regions);
 

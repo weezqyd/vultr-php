@@ -15,8 +15,7 @@ use Vultr\Adapter\AdapterInterface;
 use Vultr\Entity\Meta;
 
 /**
- * @author Antoine Corcy <contact@sbin.dk>
- * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 abstract class AbstractApi
 {

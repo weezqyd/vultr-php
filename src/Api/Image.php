@@ -1,5 +1,4 @@
 <?php
-
 /*
  * This file is part of the Vultr PHP library.
  *
@@ -15,13 +14,12 @@ use Vultr\Entity\Image as ImageEntity;
 use Vultr\Exception\HttpException;
 
 /**
- * @author Yassir Hannoun <yassir.hannoun@gmail.com>
- * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 class Image extends AbstractApi
 {
     /**
-     * @param array $criteria
+     * List all ISOs currently available on this account.
      *
      * @return ImageEntity[]
      */
@@ -39,19 +37,21 @@ class Image extends AbstractApi
     }
 
     /**
-     * @param int    $id
-     * @param string $name
+     * Create a new ISO image on the current account.
+     *
+     * The ISO image will be downloaded from a given URL.
+     * Download status can be checked with the v1/iso/list call.
+     *
+     * @param string $url
      *
      * @throws HttpException
      *
-     * @return ImageEntity
+     * @return mixed Api response
      */
-    public function create($id, $name)
+    public function create($url)
     {
-        $image = $this->adapter->put(sprintf('%s/images/%d', $this->endpoint, $id), ['name' => $name]);
+        $image = $this->adapter->post(sprintf('%s/iso/create_from_url', $this->endpoint), ['url' => $url]);
 
-        $image = json_decode($image);
-
-        return new ImageEntity($image->image);
+        return json_decode($image);
     }
 }
