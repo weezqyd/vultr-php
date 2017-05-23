@@ -10,10 +10,11 @@
 
 namespace Vultr\Adapter;
 
-use Vultr\Exception\HttpException;
+use Vultr\Exceptions\HttpException;
 use GuzzleHttp\Client;
 use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
+use GuzzleHttp\Exception\ConnectException;
 use GuzzleHttp\Message\ResponseInterface;
 use GuzzleHttp\Psr7\Response;
 
@@ -57,6 +58,7 @@ class GuzzleHttpAdapter implements AdapterInterface
         try {
             $this->response = $this->client->get($url);
         } catch (RequestException $e) {
+            $this->exception = $e;
             $this->response = $e->getResponse();
             $this->handleError();
         }
@@ -72,6 +74,7 @@ class GuzzleHttpAdapter implements AdapterInterface
         try {
             $this->response = $this->client->delete($url);
         } catch (RequestException $e) {
+            $this->exception = $e;
             $this->response = $e->getResponse();
             $this->handleError();
         }
@@ -91,6 +94,7 @@ class GuzzleHttpAdapter implements AdapterInterface
         try {
             $this->response = $this->client->put($url, $options);
         } catch (RequestException $e) {
+            $this->exception = $e;
             $this->response = $e->getResponse();
             $this->handleError();
         }
@@ -110,6 +114,7 @@ class GuzzleHttpAdapter implements AdapterInterface
         try {
             $this->response = $this->client->post($url, $options);
         } catch (RequestException $e) {
+            $this->exception = $e;
             $this->response = $e->getResponse();
             $this->handleError();
         }
@@ -138,6 +143,9 @@ class GuzzleHttpAdapter implements AdapterInterface
      */
     protected function handleError()
     {
+        if ($this->exception instanceof ConnectException) {
+            throw new HttpException($this->exception->getMessage(), 500);
+        }
         $body = (string) $this->response->getBody();
         $code = (int) $this->response->getStatusCode();
 

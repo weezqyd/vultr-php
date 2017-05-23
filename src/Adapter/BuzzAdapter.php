@@ -21,6 +21,7 @@ use Vultr\Exceptions\HttpException;
 /**
  * @author Antoine Corcy <contact@sbin.dk>
  * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 class BuzzAdapter implements AdapterInterface
 {

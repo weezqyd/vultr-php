@@ -39,19 +39,31 @@ class ReservedIp extends AbstractApi
     }
 
     /**
-     * @param int $dropletId
+     * Create a new reserved IP.
+     *
+     * Reserved IPs can only be used within the same datacenter for which
+     * they were created.
+     *
+     * @param int    $dcId
+     * @param string $ipType
+     * @param string $label
      *
      * @throws HttpException
      *
      * @return FloatingIpEntity
      */
-    public function createAssigned($dropletId)
+    public function create($dcId, $ipType, $label = null)
     {
-        $ip = $this->adapter->post(sprintf('%s/floating_ips', $this->endpoint), ['droplet_id' => $dropletId]);
+        $content = [
+            'DCID' => $dcId,
+            'ip_type' => $ipType,
+        ];
+        if (null !== $label) {
+            $content['label'] = $label;
+        }
+        $response = $this->adapter->post(sprintf('%s/reservedip/create', $this->endpoint), $content);
 
-        $ip = json_decode($ip);
-
-        return new FloatingIpEntity($ip->floating_ip);
+        return json_decode($response);
     }
 
     /**

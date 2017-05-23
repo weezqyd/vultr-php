@@ -18,6 +18,7 @@ use Buzz\Message\RequestInterface;
 /**
  * @author Antoine Corcy <contact@sbin.dk>
  * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 class BuzzOAuthListener implements ListenerInterface
 {

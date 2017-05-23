@@ -11,8 +11,12 @@
 
 namespace Vultr\Entity;
 
+use Vultr\Support\Str;
+
 abstract class AbstractEntity
 {
+    use Str;
+
     /**
      * @param \stdClass|array|null $parameters
      */
@@ -47,36 +51,5 @@ abstract class AbstractEntity
                 $this->$property = static::convertDateTime($this->$property);
             }
         }
-    }
-
-    /**
-     * @param string|null $date DateTime string
-     *
-     * @return string|null DateTime in ISO8601 format
-     */
-    protected static function convertDateTime($date)
-    {
-        if (!$date) {
-            return;
-        }
-
-        $date = new \DateTime($date);
-        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
-
-        return $date->format(\DateTime::ISO8601);
-    }
-
-    /**
-     * @param string $str Snake case string
-     *
-     * @return string Camel case string
-     */
-    protected static function convertToCamelCase($str)
-    {
-        $callback = function ($match) {
-            return strtoupper($match[2]);
-        };
-
-        return lcfirst(preg_replace_callback('/(^|_)([a-z])/', $callback, $str));
     }
 }
