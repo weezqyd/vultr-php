@@ -21,16 +21,12 @@ class Account extends AbstractApi
     /**
      * Retrieve information about the current account.
      *
-     * @see https://www.vultr.com/api/#account
-     *
      * @return AccountEntity
      */
     public function getUserInformation()
     {
         $account = $this->adapter->get(sprintf('%s/account/info', $this->endpoint));
 
-        $account = json_decode($account);
-
-        return new AccountEntity($account);
+        return $this->handleResponse($account, AccountEntity::class);
     }
 }

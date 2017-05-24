@@ -21,16 +21,12 @@ class Auth extends AbstractApi
     /**
      * Retrieve information about the current API key.
      *
-     * @see https://www.vultr.com/api/#auth_info
-     *
      * @return AuthEntity
      */
     public function getKeyInformation()
     {
-        $api = $this->adapter->get(sprintf('%s/auth/info', $this->endpoint));
+        $response = $this->adapter->get(sprintf('%s/auth/info', $this->endpoint));
 
-        $api = json_decode($api, true);
-
-        return new AuthEntity($api);
+        return $this->handleResponse($response, AuthEntity::class);
     }
 }

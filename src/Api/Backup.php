@@ -21,20 +21,15 @@ class Backup extends AbstractApi
     /**
      * List all backups on the current account.
      *
-     * @see https://www.vultr.com/api/#backup_backup_list
-     *
-     * @return BackupEntity
-     *
      * @param int    $sub_id    Filter result set to only contain backups of this subscription object
      * @param string $backup_id filter result set to only contain this backup
+     * 
+     * @return BackupEntity
      */
-    public function list($subid = null, $backup_id = null)
+    public function list($subId = null, $backupId = null)
     {
-        $backups = $this->adapter->get(sprintf('%s/backup/list?SUBID=%d&BACKUPID=%s', $this->endpoint, $subid, $backup_id));
+        $backups = $this->adapter->get(sprintf('%s/backup/list?SUBID=%d&BACKUPID=%s', $this->endpoint, $subId, $backupId));
 
-        $backups = json_decode($backups, true);
-        return array_map(function ($backup) {
-            return new BackupEntity($backup);
-        }, $backups);
+        return $this->handleResponse($backups, BackupEntity::class, true);
     }
 }

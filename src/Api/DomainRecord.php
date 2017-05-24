@@ -32,13 +32,7 @@ class DomainRecord extends AbstractApi
     {
         $domainRecords = $this->adapter->get(sprintf('%s/dns/records?domain=%s', $this->endpoint, $domain));
 
-        $domainRecords = json_decode($domainRecords);
-
-        $this->extractMeta($domainRecords);
-
-        return array_map(function ($domainRecord) {
-            return new DomainRecordEntity($domainRecord);
-        }, $domainRecords);
+        return $this->handleResponse($domainRecords, DomainRecordEntity::class, true);
     }
 
     /**
@@ -52,8 +46,6 @@ class DomainRecord extends AbstractApi
      * @param int    $ttl      TTL of this record
      *
      * @throws HttpException|InvalidRecordException
-     *
-     * @return DomainRecordEntity
      */
     public function create($domain, $type, $name, $data, $priority = null, $ttl = null)
     {
@@ -87,10 +79,6 @@ class DomainRecord extends AbstractApi
             $content['ttl'] = $ttl;
         }
         $domainRecord = $this->adapter->post(sprintf('%s/dns/create_record', $this->endpoint), $content);
-
-        $domainRecord = json_decode($domainRecord);
-
-        return new DomainRecordEntity($domainRecord->domain_record);
     }
 
     /**

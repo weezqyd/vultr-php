@@ -64,4 +64,21 @@ abstract class AbstractApi
     {
         return $this->meta;
     }
+    /**
+     * undocumented function summary
+     *
+     * Undocumented function long description
+     *
+     * @param type var Description
+     **/
+    protected function handleResponse($response, $entity, $isArray = false)
+    {
+        $object = json_decode($response, true);
+        if ($isArray) {
+            return array_map(function ($entity) {
+                return new $class($entity);
+            });
+        }
+        return new $class($object);
+    }
 }

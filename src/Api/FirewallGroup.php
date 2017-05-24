@@ -22,20 +22,13 @@ class FirewallGroup extends AbstractApi
     /**
      * List all firewall groups on the current account.
      *
-     * @see https://www.vultr.com/api/#firewall_group_list
-     *
      * @return FirewallGroupEntity
      */
     public function list()
     {
         $response = $this->getAny();
-
-        $groups = json_decode($response);
-        $this->extractMeta($groups);
-
-        return array_map(function ($group) {
-            return new FirewallGroupEntity($group);
-        }, $groups);
+        
+        return $this->handleResponse($response, FirewallGroup::class, true);
     }
 
     /**

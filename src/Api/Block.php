@@ -21,8 +21,6 @@ class Block extends AbstractApi
     /**
      * Retrieve a list of any active block storage subscriptions on this account.
      *
-     * @see https://www.vultr.com/api/#block_block_list
-     *
      * @return BlockEntity
      */
     public function list()
@@ -37,9 +35,7 @@ class Block extends AbstractApi
     }
 
     /**
-     * Retrieve a list of any active block storage subscriptions on this account.
-     *
-     * @see https://www.vultr.com/api/#block_block_list
+     * Retrieve a list of any active block storage subscriptions on this account
      *
      * @return BlockEntity
      *
@@ -48,9 +44,8 @@ class Block extends AbstractApi
     public function getById($subId)
     {
         $response = $this->adapter->get(sprintf('%s/block/list?SUBID=%d', $this->endpoint, $subId));
-        $blocks = json_decode($response);
 
-        return new BlockEntity($blocks[0]);
+        return $this->handleResponse($blocks,  BlockEntity::class);
     }
 
     /**
