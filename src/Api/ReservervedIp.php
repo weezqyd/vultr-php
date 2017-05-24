@@ -11,7 +11,6 @@
 
 namespace Vultr\Api;
 
-use Vultr\Entity\Action as ActionEntity;
 use Vultr\Entity\ReservedIp as ReservedIpEntity;
 use Vultr\Exception\HttpException;
 
@@ -67,103 +66,77 @@ class ReservedIp extends AbstractApi
     }
 
     /**
-     * @param string $regionSlug
+     * Remove a reserved IP from your account.
      *
-     * @throws HttpException
+     * After making this call, you will not be able to recover the IP address.
      *
-     * @return FloatingIpEntity
-     */
-    public function createReserved($regionSlug)
-    {
-        $ip = $this->adapter->post(sprintf('%s/floating_ips', $this->endpoint), ['region' => $regionSlug]);
-
-        $ip = json_decode($ip);
-
-        return new FloatingIpEntity($ip->floating_ip);
-    }
-
-    /**
-     * @param int $id
+     * @param int $ipAddressipAddress
      *
      * @throws HttpException
      */
-    public function delete($id)
+    public function delete($ipAddressipAddress)
     {
-        $this->adapter->delete(sprintf('%s/floating_ips/%s', $this->endpoint, $id));
+        $this->adapter->delete(sprintf('%s/reservedip/destroy', $this->endpoint), ['ip_address' => $ipAddressipAddress]);
     }
 
     /**
-     * @param int $id
+     * Convert an existing IP on a subscription to a reserved IP.
      *
-     * @return ActionEntity[]
-     */
-    public function getActions($id)
-    {
-        $actions = $this->adapter->get(sprintf('%s/floating_ips/%s/actions?per_page=%d', $this->endpoint, $id, 200));
-
-        $actions = json_decode($actions);
-
-        $this->meta = $this->extractMeta($actions);
-
-        return array_map(function ($action) {
-            return new ActionEntity($action);
-        }, $actions->actions);
-    }
-
-    /**
-     * @param int $id
-     * @param int $actionId
+     * @param int    $serverId  SUBID of the server that currently has the IP address
+     * @param string $ipAddress IP address you want to convert
+     * @param string $paramname Label for this reserved IP
      *
-     * @return ActionEntity
+     * @throws HttpException
      */
-    public function getActionById($id, $actionId)
+    public function convert($serverIdd, $ipAddress, $label = null)
     {
-        $action = $this->adapter->get(sprintf('%s/floating_ips/%s/actions/%d', $this->endpoint, $id, $actionId));
-
-        $action = json_decode($action);
-
-        return new ActionEntity($action->action);
+        $content = [
+            'SUBID' => $serverIdd,
+            'ip_address' => $ipAddress,
+        ];
+        if (null !== $label) {
+            $content['label'] = $label;
+        }
+        $this->adapter->post(sprintf('%s/reservedip/conver', $this->endpoint), $content);
     }
 
     /**
-     * @param int $id
-     * @param int $dropletId
+     * Attach a reserved IP to an existing subscription.
+     *
+     * @param int $ipAddress Reserved IP to attach to your account
+     * @param int $serverId  Server to attach the reserved IP to
      *
      * @throws HttpException
      *
      * @return ActionEntity
      */
-    public function assign($id, $dropletId)
+    public function attach($ipAddress, $serverId)
     {
-        return $this->executeAction($id, ['type' => 'assign', 'droplet_id' => $dropletId]);
+        return $this->executeAction($ipAddress, $serverId, 'attach');
     }
 
     /**
-     * @param int $id
+     * @param int $ipAddress
+     * @param int $serverId
      *
      * @throws HttpException
-     *
-     * @return ActionEntity
      */
-    public function unassign($id)
+    public function detach($ipAddress, $serverId)
     {
-        return $this->executeAction($id, ['type' => 'unassign']);
+        return $this->executeAction($ipAddress, $serverId, 'detach');
     }
 
     /**
-     * @param int   $id
-     * @param array $options
+     * Detach a reserved IP from an existing subscription.
+     *
+     * @param string $ipAddress
+     * @param int    $serverId
+     * @param string $action
      *
      * @throws HttpException
-     *
-     * @return ActionEntity
      */
-    private function executeAction($id, array $options)
+    private function executeAction($ipAddress, $serverId, $action)
     {
-        $action = $this->adapter->post(sprintf('%s/floating_ips/%s/actions', $this->endpoint, $id), $options);
-
-        $action = json_decode($action);
-
-        return new ActionEntity($action->action);
+        return $this->adapter->post(sprintf('%s/reservedip/'.$action, $this->endpoint), ['ip_address' => $ipAddress, 'attach_SUBID' => $serverId]);
     }
 }

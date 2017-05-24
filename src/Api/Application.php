@@ -26,15 +26,15 @@ class Application extends AbstractApi
      *
      * @return ApplicationEntity
      */
-    public function getAll()
+    public function list()
     {
-        $applications = $this->adapter->get(sprintf('%s/app/list', $this->endpoint));
+        $response = $this->adapter->get(sprintf('%s/app/list', $this->endpoint));
 
-        $applications = json_decode($applications);
+        $applications = json_decode($response);
         $this->extractMeta($applications);
-
+        
         return array_map(function ($app) {
             return new ApplicationEntity($app);
-        }, $applications);
+        }, get_object_vars($applications));
     }
 }

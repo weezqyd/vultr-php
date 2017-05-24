@@ -25,12 +25,11 @@ class Block extends AbstractApi
      *
      * @return BlockEntity
      */
-    public function getAll()
+    public function list()
     {
         $blocks = $this->adapter->get(sprintf('%s/block/list', $this->endpoint));
 
-        $blocks = json_decode($blocks);
-        $this->extractMeta($blocks);
+        $blocks = json_decode($blocks, true);
 
         return array_map(function ($block) {
             return new BlockEntity($block);

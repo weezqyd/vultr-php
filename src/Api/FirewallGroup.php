@@ -26,7 +26,7 @@ class FirewallGroup extends AbstractApi
      *
      * @return FirewallGroupEntity
      */
-    public function getAll()
+    public function list()
     {
         $response = $this->getAny();
 

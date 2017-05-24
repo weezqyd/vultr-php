@@ -42,11 +42,11 @@ class GuzzleHttpAdapter implements AdapterInterface
     public function __construct($token, ClientInterface $client = null)
     {
         if (version_compare(ClientInterface::VERSION, '6') === 1) {
-            $this->client = $client ?: new Client(['headers' => ['Authorization' => sprintf('Bearer %s', $token)]]);
+            $this->client = $client ?: new Client(['headers' => ['API-Key' =>$token]]);
         } else {
             $this->client = $client ?: new Client();
 
-            $this->client->setDefaultOption('headers/Authorization', sprintf('Bearer %s', $token));
+            $this->client->setDefaultOption('headers/API-Key', $token);
         }
     }
 
@@ -151,6 +151,6 @@ class GuzzleHttpAdapter implements AdapterInterface
 
         $content = json_decode($body);
 
-        throw new HttpException(isset($content->message) ? $content->message : 'Request not processed.', $code);
+        throw new HttpException(isset($content->message) ? $content->message : $this->exception->getMessage(), $code);
     }
 }

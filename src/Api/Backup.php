@@ -28,13 +28,11 @@ class Backup extends AbstractApi
      * @param int    $sub_id    Filter result set to only contain backups of this subscription object
      * @param string $backup_id filter result set to only contain this backup
      */
-    public function getAll($subid = null, $backup_id = null)
+    public function list($subid = null, $backup_id = null)
     {
         $backups = $this->adapter->get(sprintf('%s/backup/list?SUBID=%d&BACKUPID=%s', $this->endpoint, $subid, $backup_id));
 
-        $backups = json_decode($backups);
-        $this->extractMeta($backups);
-
+        $backups = json_decode($backups, true);
         return array_map(function ($backup) {
             return new BackupEntity($backup);
         }, $backups);

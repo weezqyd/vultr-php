@@ -29,7 +29,7 @@ class Auth extends AbstractApi
     {
         $api = $this->adapter->get(sprintf('%s/auth/info', $this->endpoint));
 
-        $api = json_decode($api);
+        $api = json_decode($api, true);
 
         return new AuthEntity($api);
     }

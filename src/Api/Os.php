@@ -28,11 +28,9 @@ class Os extends AbstractApi
      */
     public function list()
     {
-        $response = $this->adapter->get(sprintf('%s/iso/list', $this->endpoint));
+        $response = $this->adapter->get(sprintf('%s/os/list', $this->endpoint));
 
-        $osList = json_decode($response);
-
-        $this->extractMeta($osList);
+        $osList = json_decode($response, true);
 
         return array_map(function ($os) {
             return new OsEntity($os);

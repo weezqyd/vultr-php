@@ -1,28 +1,27 @@
 <?php
 
 /*
- * This file is part of the DigitalOceanV2 library.
+ * This file is part of the Vultr PHP library.
  *
- * (c) Antoine Corcy <contact@sbin.dk>
+ * (c) Albert Leitato <wizqydy@gmail.com>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
+namespace Vultr\Api;
 
-namespace DigitalOceanV2\Api;
-
-use DigitalOceanV2\Entity\Action as ActionEntity;
-use DigitalOceanV2\Entity\Droplet as DropletEntity;
-use DigitalOceanV2\Entity\Image as ImageEntity;
-use DigitalOceanV2\Entity\Kernel as KernelEntity;
-use DigitalOceanV2\Entity\Upgrade as UpgradeEntity;
-use DigitalOceanV2\Exception\HttpException;
+use Vultr\Entity\Action as ActionEntity;
+use Vultr\Entity\Droplet as DropletEntity;
+use Vultr\Entity\Image as ImageEntity;
+use Vultr\Entity\Kernel as KernelEntity;
+use Vultr\Entity\Upgrade as UpgradeEntity;
+use Vultr\Exception\HttpException;
 
 /**
  * @author Yassir Hannoun <yassir.hannoun@gmail.com>
  * @author Graham Campbell <graham@alt-three.com>
  */
-class Droplet extends AbstractApi
+class Server extends AbstractApi
 {
     /**
      * @param int $per_page
@@ -31,7 +30,7 @@ class Droplet extends AbstractApi
      *
      * @return DropletEntity[]
      */
-    public function getAll($per_page = 200, $page = 1, $tag = null)
+    public function list($per_page = 200, $page = 1, $tag = null)
     {
         $url = sprintf('%s/droplets?per_page=%d&page=%d', $this->endpoint, $per_page, $page);
 
@@ -109,51 +108,46 @@ class Droplet extends AbstractApi
     }
 
     /**
-     * @param array|string $names
-     * @param string       $region
-     * @param string       $size
-     * @param string|int   $image
-     * @param bool         $backups
-     * @param bool         $ipv6
-     * @param bool         $privateNetworking
-     * @param int[]        $sshKeys
-     * @param string       $userData
-     * @param bool         $monitoring
-     * @param array        $volumes
-     * @param array        $tags
+     * @param int       $dcId
+     * @param string    $vpsPlanId
+     * @param string    $osId
+     * @param array     $options
+
      *
      * @throws HttpException
      *
      * @return DropletEntity|null
      */
-    public function create($names, $region, $size, $image, $backups = false, $ipv6 = false, $privateNetworking = false, array $sshKeys = [], $userData = '', $monitoring = true, array $volumes = [], array $tags = [])
+    public function create($dcId, $vpsPlanId, $osId, array $options)
     {
-        $data = is_array($names) ? ['names' => $names] : ['name' => $names];
-
-        $data = array_merge($data, [
-            'region' => $region,
-            'size' => $size,
-            'image' => $image,
-            'backups' => $backups ? 'true' : 'false',
-            'ipv6' => $ipv6 ? 'true' : 'false',
-            'private_networking' => $privateNetworking ? 'true' : 'false',
-            'monitoring' => $monitoring ? 'true' : 'false',
-        ]);
-
-        if (0 < count($sshKeys)) {
-            $data['ssh_keys'] = $sshKeys;
-        }
-
-        if (!empty($userData)) {
-            $data['user_data'] = $userData;
-        }
-
-        if (0 < count($volumes)) {
-            $data['volumes'] = $volumes;
-        }
-
-        if (0 < count($tags)) {
-            $data['tags'] = $tags;
+       $content = [
+           'DCID' => $dcId,
+           'vps_plan_id' => $vpsPlanId,
+           'OSID' => $osId,
+       ];
+        $optional = [
+            'ipxe_chain_url',
+            'ISOID',
+            'SCRIPTID' ,
+            'SNAPSHOTID' ,
+            'enable_ipv6',
+            'enable_private_network',
+            'label',
+            'SSHKEYID',
+            'auto_backups',
+            'APPID',
+            'userdata',
+            'notify_activate',
+            'ddos_protection',
+            'reserved_ip_v4',
+            'hostname',
+            'tag',
+            'FIREWALLGROUPID',
+        ];
+        foreach ($optional as $key => $option) {
+            if(array_key_exists($option, $options)){
+                
+            }
         }
 
         $droplet = $this->adapter->post(sprintf('%s/droplets', $this->endpoint), $data);

@@ -40,11 +40,9 @@ trait Str
      */
     public static function convertToCamelCase($str)
     {
-        $callback = function ($match) {
-            return strtoupper($match[2]);
-        };
+        $string =  static::studly($str);
 
-        return lcfirst(preg_replace_callback('/(^|_)([a-z])/', $callback, $str));
+        return lcfirst($string);
     }
 
     /**
@@ -56,7 +54,7 @@ trait Str
      */
     public static function studly($value)
     {
-        $value = ucwords(str_replace(['-', '_'], ' ', $value));
+        $value = ucwords(str_replace(['-', '_'], ' ', strtolower($value)));
 
         return str_replace(' ', '', $value);
     }

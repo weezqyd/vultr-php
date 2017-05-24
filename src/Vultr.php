@@ -65,10 +65,10 @@ class Vultr
     protected function getClass($class)
     {
         $resource = static::studly($class);
-        $class = "Vultr\Api\\".$resource;
+        $class = 'Vultr\\Api\\'.$resource;
         if (class_exists($class)) {
             return new $class($this->adapter);
         }
-        throw new Exceptions\EntityNotFoundException("The class $class does not exist");
+        throw new Exceptions\ErrorException("The class $class does not exist");
     }
 }

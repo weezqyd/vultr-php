@@ -24,7 +24,7 @@ class Domain extends AbstractApi
      *
      * @return DomainEntity[]
      */
-    public function getAll()
+    public function list()
     {
         $domains = $this->adapter->get(sprintf('%s/dns/list', $this->endpoint));
 

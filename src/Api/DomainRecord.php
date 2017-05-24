@@ -28,7 +28,7 @@ class DomainRecord extends AbstractApi
      *
      * @return DomainRecordEntity
      */
-    public function getAll($domain)
+    public function list($domain)
     {
         $domainRecords = $this->adapter->get(sprintf('%s/dns/records?domain=%s', $this->endpoint, $domain));
 
