@@ -30,12 +30,7 @@ class FirewallRule extends AbstractApi
         $params = 'FIREWALLGROUPID=%s&direction=%s&ip_type=%s';
         $response = $this->adapter->get(sprintf('%s/firewall/rule_list'.$params, $this->endpoint, $groupId, $direction, $ipType));
 
-        $groups = json_decode($response);
-        $this->extractMeta($groups);
-
-        return array_map(function ($group) {
-            return new FirewallRuleEntity($group);
-        }, $groups);
+        return $this->handleResponse($response, self::class, true);
     }
 
     /**

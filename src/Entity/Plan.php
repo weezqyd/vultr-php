@@ -19,7 +19,7 @@ final class Plan extends AbstractEntity
     /**
      * @var int
      */
-    public $vsplanid;
+    public $vpsplanid;
 
     /**
      * @var int

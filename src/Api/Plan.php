@@ -30,12 +30,6 @@ class Plan extends AbstractApi
     {
         $response = $this->adapter->get(sprintf('%s/plans/list?type=%s', $this->endpoint, $type));
 
-        $plans = json_decode($response);
-
-        $this->extractMeta($plans);
-
-        return array_map(function ($plan) {
-            return new PlanEntity($plan);
-        }, $plan);
+        return $this->handleResponse($response, PlanEntity::class, true);
     }
 }

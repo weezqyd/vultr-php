@@ -30,10 +30,6 @@ class Os extends AbstractApi
     {
         $response = $this->adapter->get(sprintf('%s/os/list', $this->endpoint));
 
-        $osList = json_decode($response, true);
-
-        return array_map(function ($os) {
-            return new OsEntity($os);
-        }, $osList);
+        return $this->handleResponse($response, OsEntity::class, true);
     }
 }
