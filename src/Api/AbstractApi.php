@@ -36,7 +36,6 @@ abstract class AbstractApi
 
     /**
      * @param AdapterInterface $adapter
-     * @param string|null      $endpoint
      */
     public function __construct(AdapterInterface $adapter)
     {
@@ -44,33 +43,15 @@ abstract class AbstractApi
     }
 
     /**
-     * @param \stdClass $data
+     * Bind response to Entity.
      *
-     * @return Meta|null
-     */
-    protected function extractMeta(\StdClass $data)
-    {
-        if (isset($data->meta)) {
-            $this->meta = new Meta($data->meta);
-        }
-
-        return $this->meta;
-    }
-
-    /**
-     * @return Meta|null
-     */
-    public function getMeta()
-    {
-        return $this->meta;
-    }
-
-    /**
-     * undocumented function summary.
+     * Decode API response and bind the response to the respective entity
      *
-     * Undocumented function long description
+     * @param string $response the response from the API
+     * @param string $class    Entity to bind the response to
+     * @param bool   $isArray  If the response is a collection
      *
-     * @param type var Description
+     * @return object Entity instance
      **/
     protected function handleResponse($response, $class, $isArray = false)
     {
