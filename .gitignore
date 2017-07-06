@@ -2,3 +2,4 @@ vendor/
 env.ini
 .php_cs.cache
 build/
+composer.lock
