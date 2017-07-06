@@ -76,7 +76,7 @@ class DomainRecord extends AbstractApi
         if (null !== $ttl) {
             $content['ttl'] = $ttl;
         }
-        $domainRecord = $this->adapter->post(\sprintf('%s/dns/create_record', $this->endpoint), $content);
+        $this->adapter->post(\sprintf('%s/dns/create_record', $this->endpoint), $content);
     }
 
     /**

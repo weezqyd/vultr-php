@@ -43,7 +43,7 @@ class Block extends AbstractApi
     {
         $response = $this->adapter->get(\sprintf('%s/block/list?SUBID=%d', $this->endpoint, $subId));
 
-        return $this->handleResponse($blocks, BlockEntity::class);
+        return $this->handleResponse($response, BlockEntity::class);
     }
 
     /**
