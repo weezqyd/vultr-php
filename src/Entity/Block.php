@@ -10,7 +10,7 @@
 
 namespace Vultr\Entity;
 
-final class Backup extends AbstractEntity
+final class Block extends AbstractEntity
 {
     /**
      * @var int

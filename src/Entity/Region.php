@@ -7,7 +7,7 @@
  *   For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  */
-namespace DigitalOceanV2\Entity;
+namespace Vultr\Entity;
 
 /**
  * @author Yassir Hannoun <yassir.hannoun@gmail.com>

@@ -7,18 +7,26 @@
  *   For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  */
+
 namespace Vultr\Tests\Unit;
 
 use Vultr\Api\Account;
 use Vultr\Tests\TestCase;
 
+/**
+ * @coversDefault Account
+ */
 class AccountTest extends TestCase
 {
+    /**
+     * @covers ::getUserInformation
+     * @covers ::__construct
+     */
     public function testGetUserInformation()
     {
-        $mock    = $this->getRequest();
+        $mock = $this->getRequest();
         $account = new Account($mock);
-        $user    = $account->getUserInformation();
+        $user = $account->getUserInformation();
         $this->assertInstanceOf('Vultr\Entity\Account', $user);
         $this->assertEquals($user, new \Vultr\Entity\Account($this->getResponse(true)));
     }
