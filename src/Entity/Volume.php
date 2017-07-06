@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the DigitalOceanV2 library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Antoine Corcy <contact@sbin.dk>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace DigitalOceanV2\Entity;
 
 /**
@@ -61,7 +59,7 @@ final class Volume extends AbstractEntity
         foreach ($parameters as $property => $value) {
             switch ($property) {
                 case 'region':
-                    if (is_object($value)) {
+                    if (\is_object($value)) {
                         $this->region = new Region($value);
                     }
                     unset($parameters[$property]);

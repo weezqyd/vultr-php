@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr;
 
 /*
@@ -65,8 +63,8 @@ class Vultr
     protected function getClass($class)
     {
         $resource = static::studly($class);
-        $class = 'Vultr\\Api\\'.$resource;
-        if (class_exists($class)) {
+        $class    = 'Vultr\\Api\\' . $resource;
+        if (\class_exists($class)) {
             return new $class($this->adapter);
         }
         throw new Exceptions\ErrorException("The class $class does not exist");

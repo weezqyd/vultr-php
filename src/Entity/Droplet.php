@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the DigitalOceanV2 library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Antoine Corcy <contact@sbin.dk>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace DigitalOceanV2\Entity;
 
 /**
@@ -145,20 +143,20 @@ final class Droplet extends AbstractEntity
         foreach ($parameters as $property => $value) {
             switch ($property) {
                 case 'networks':
-                    if (is_object($value)) {
-                        if (property_exists($value, 'v4')) {
+                    if (\is_object($value)) {
+                        if (\property_exists($value, 'v4')) {
                             foreach ($value->v4 as $subProperty => $subValue) {
                                 $subValue->version = 4;
-                                $this->networks[] = new Network($subValue);
+                                $this->networks[]  = new Network($subValue);
                             }
                         }
 
-                        if (property_exists($value, 'v6')) {
+                        if (\property_exists($value, 'v6')) {
                             foreach ($value->v6 as $subProperty => $subValue) {
                                 $subValue->version = 6;
-                                $subValue->cidr = $subValue->netmask;
+                                $subValue->cidr    = $subValue->netmask;
                                 $subValue->netmask = null;
-                                $this->networks[] = new Network($subValue);
+                                $this->networks[]  = new Network($subValue);
                             }
                         }
                     }
@@ -166,28 +164,28 @@ final class Droplet extends AbstractEntity
                     break;
 
                 case 'kernel':
-                    if (is_object($value)) {
+                    if (\is_object($value)) {
                         $this->kernel = new Kernel($value);
                     }
                     unset($parameters[$property]);
                     break;
 
                 case 'size':
-                    if (is_object($value)) {
+                    if (\is_object($value)) {
                         $this->size = new Size($value);
                     }
                     unset($parameters[$property]);
                     break;
 
                 case 'region':
-                    if (is_object($value)) {
+                    if (\is_object($value)) {
                         $this->region = new Region($value);
                     }
                     unset($parameters[$property]);
                     break;
 
                 case 'image':
-                    if (is_object($value)) {
+                    if (\is_object($value)) {
                         $this->image = new Image($value);
                     }
                     unset($parameters[$property]);
@@ -202,11 +200,11 @@ final class Droplet extends AbstractEntity
 
         parent::build($parameters);
 
-        if (is_array($this->features) && count($this->features)) {
-            $this->backupsEnabled = in_array('backups', $this->features);
-            $this->virtIOEnabled = in_array('virtio', $this->features);
-            $this->privateNetworkingEnabled = in_array('private_networking', $this->features);
-            $this->ipv6Enabled = in_array('ipv6', $this->features);
+        if (\is_array($this->features) && \count($this->features)) {
+            $this->backupsEnabled           = \in_array('backups', $this->features);
+            $this->virtIOEnabled            = \in_array('virtio', $this->features);
+            $this->privateNetworkingEnabled = \in_array('private_networking', $this->features);
+            $this->ipv6Enabled              = \in_array('ipv6', $this->features);
         }
     }
 

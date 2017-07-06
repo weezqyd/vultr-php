@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Entity;
 
 /**
@@ -39,11 +37,11 @@ final class FloatingIp extends AbstractEntity
         parent::build($parameters);
 
         foreach ($parameters as $property => $value) {
-            if ('droplet' === $property && is_object($value)) {
+            if ('droplet' === $property && \is_object($value)) {
                 $this->droplet = new Droplet($value);
             }
 
-            if ('region' === $property && is_object($value)) {
+            if ('region' === $property && \is_object($value)) {
                 $this->region = new Region($value);
             }
         }

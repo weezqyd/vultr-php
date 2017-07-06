@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Exceptions;
 
 class ErrorException extends \InvalidArgumentException implements ExceptionInterface

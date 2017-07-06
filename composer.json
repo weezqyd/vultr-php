@@ -15,14 +15,15 @@
     },
 
     "require": {
-        "php": ">=5.4.0"
+        "php": ">=7.0"
     },
 
     "require-dev": {
         "kriswallsmith/buzz"        : "~0.10",
         "guzzlehttp/guzzle"         : "~5.0|~6.0",
-        "phpspec/phpspec"           : "~2.4",
-        "friendsofphp/php-cs-fixer" : "~1.11"
+        "phpunit/phpunit"           : "~6.1",
+        "friendsofphp/php-cs-fixer" : "~1.11",
+        "mockery/mockery": "^0.9.9"
     },
 
     "suggest": {
@@ -35,8 +36,17 @@
             "Vultr\\": "src/"
         }
     },
+    "scripts":{
+        "phpunit":"vendor/bin/phpunit"
+    },
+     "autoload-dev": {
+        "psr-4": {
+            "Vultr\\Tests\\": "tests/"
+        }
+    },
 
     "config": {
-        "preferred-install": "dist"
+        "preferred-install": "dist",
+        "bin-dir": "vendor/bin"
     }
 }

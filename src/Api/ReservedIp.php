@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\ReservedIp as ReservedIpEntity;
@@ -26,13 +24,13 @@ class ReservedIp extends AbstractApi
      */
     public function list()
     {
-        $response = $this->adapter->get(sprintf('%s/reservedip/list', $this->endpoint));
+        $response = $this->adapter->get(\sprintf('%s/reservedip/list', $this->endpoint));
 
-        $ips = json_decode($response);
+        $ips = \json_decode($response);
 
         $this->extractMeta($ips);
 
-        return array_map(function ($ip) {
+        return \array_map(function ($ip) {
             return new ReservedIpEntity($ip);
         }, $ips);
     }
@@ -54,15 +52,15 @@ class ReservedIp extends AbstractApi
     public function create($dcId, $ipType, $label = null)
     {
         $content = [
-            'DCID' => $dcId,
+            'DCID'    => $dcId,
             'ip_type' => $ipType,
         ];
         if (null !== $label) {
             $content['label'] = $label;
         }
-        $response = $this->adapter->post(sprintf('%s/reservedip/create', $this->endpoint), $content);
+        $response = $this->adapter->post(\sprintf('%s/reservedip/create', $this->endpoint), $content);
 
-        return json_decode($response);
+        return \json_decode($response);
     }
 
     /**
@@ -76,7 +74,7 @@ class ReservedIp extends AbstractApi
      */
     public function delete($ipAddressipAddress)
     {
-        $this->adapter->delete(sprintf('%s/reservedip/destroy', $this->endpoint), ['ip_address' => $ipAddressipAddress]);
+        $this->adapter->delete(\sprintf('%s/reservedip/destroy', $this->endpoint), ['ip_address' => $ipAddressipAddress]);
     }
 
     /**
@@ -91,13 +89,13 @@ class ReservedIp extends AbstractApi
     public function convert($serverIdd, $ipAddress, $label = null)
     {
         $content = [
-            'SUBID' => $serverIdd,
+            'SUBID'      => $serverIdd,
             'ip_address' => $ipAddress,
         ];
         if (null !== $label) {
             $content['label'] = $label;
         }
-        $this->adapter->post(sprintf('%s/reservedip/conver', $this->endpoint), $content);
+        $this->adapter->post(\sprintf('%s/reservedip/conver', $this->endpoint), $content);
     }
 
     /**
@@ -137,6 +135,6 @@ class ReservedIp extends AbstractApi
      */
     private function executeAction($ipAddress, $serverId, $action)
     {
-        return $this->adapter->post(sprintf('%s/reservedip/'.$action, $this->endpoint), ['ip_address' => $ipAddress, 'attach_SUBID' => $serverId]);
+        return $this->adapter->post(\sprintf('%s/reservedip/' . $action, $this->endpoint), ['ip_address' => $ipAddress, 'attach_SUBID' => $serverId]);
     }
 }

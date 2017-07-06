@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Adapter\AdapterInterface;
@@ -55,9 +53,9 @@ abstract class AbstractApi
      **/
     protected function handleResponse($response, $class, $isArray = false)
     {
-        $object = json_decode($response, true);
+        $object = \json_decode($response, true);
         if ($isArray) {
-            return array_map(function ($entity) use ($class) {
+            return \array_map(function ($entity) use ($class) {
                 return new $class($entity);
             }, $object);
         }

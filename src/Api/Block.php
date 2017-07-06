@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\Block as BlockEntity;
@@ -25,11 +23,11 @@ class Block extends AbstractApi
      */
     public function list()
     {
-        $blocks = $this->adapter->get(sprintf('%s/block/list', $this->endpoint));
+        $blocks = $this->adapter->get(\sprintf('%s/block/list', $this->endpoint));
 
-        $blocks = json_decode($blocks, true);
+        $blocks = \json_decode($blocks, true);
 
-        return array_map(function ($block) {
+        return \array_map(function ($block) {
             return new BlockEntity($block);
         }, $blocks);
     }
@@ -43,9 +41,9 @@ class Block extends AbstractApi
      */
     public function getById($subId)
     {
-        $response = $this->adapter->get(sprintf('%s/block/list?SUBID=%d', $this->endpoint, $subId));
+        $response = $this->adapter->get(\sprintf('%s/block/list?SUBID=%d', $this->endpoint, $subId));
 
-        return $this->handleResponse($blocks,  BlockEntity::class);
+        return $this->handleResponse($blocks, BlockEntity::class);
     }
 
     /**
@@ -58,15 +56,15 @@ class Block extends AbstractApi
     public function create($dc_id, int $size, $label = '')
     {
         $data = [
-            'DCID' => $dc_id,
+            'DCID'    => $dc_id,
             'size_gb' => $size,
         ];
         if (!empty($label)) {
             $data['label'] = $label;
         }
-        $response = $this->adapter->post(sprintf('%s/block/create', $this->endpoint), $data);
+        $response = $this->adapter->post(\sprintf('%s/block/create', $this->endpoint), $data);
 
-        return json_decode($response);
+        return \json_decode($response);
     }
 
     /**
@@ -80,7 +78,7 @@ class Block extends AbstractApi
      */
     public function delete($subid)
     {
-        $this->adapter->post(sprintf('%s/block/delete', $this->endpoint), ['SUBID' => $subid]);
+        $this->adapter->post(\sprintf('%s/block/delete', $this->endpoint), ['SUBID' => $subid]);
     }
 
     /**
@@ -92,7 +90,7 @@ class Block extends AbstractApi
      */
     public function detach($subid)
     {
-        $this->adapter->post(sprintf('%s/block/detach', $this->endpoint), ['SUBID' => $subid]);
+        $this->adapter->post(\sprintf('%s/block/detach', $this->endpoint), ['SUBID' => $subid]);
     }
 
     /**
@@ -109,7 +107,7 @@ class Block extends AbstractApi
             'SUBID' => $subid,
             'label' => $label,
         ];
-        $this->adapter->post(sprintf('%s/block/label_set', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/block/label_set', $this->endpoint), $data);
     }
 
     /**
@@ -127,9 +125,9 @@ class Block extends AbstractApi
     public function resize($subid, $size)
     {
         $data = [
-            'SUBID' => $subid,
+            'SUBID'   => $subid,
             'size_gb' => $size,
         ];
-        $this->adapter->post(sprintf('%s/block/resize', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/block/resize', $this->endpoint), $data);
     }
 }

@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the DigitalOceanV2 library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Antoine Corcy <contact@sbin.dk>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace DigitalOceanV2\Api;
 
 use DigitalOceanV2\Entity\Size as SizeEntity;
@@ -24,13 +22,13 @@ class Size extends AbstractApi
      */
     public function getAll()
     {
-        $sizes = $this->adapter->get(sprintf('%s/sizes?per_page=%d', $this->endpoint, 200));
+        $sizes = $this->adapter->get(\sprintf('%s/sizes?per_page=%d', $this->endpoint, 200));
 
-        $sizes = json_decode($sizes);
+        $sizes = \json_decode($sizes);
 
         $this->extractMeta($sizes);
 
-        return array_map(function ($size) {
+        return \array_map(function ($size) {
             return new SizeEntity($size);
         }, $sizes->sizes);
     }

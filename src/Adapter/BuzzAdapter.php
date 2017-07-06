@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Adapter;
 
 use Buzz\Browser;
@@ -37,7 +35,7 @@ class BuzzAdapter implements AdapterInterface
      */
     public function __construct($token, Browser $browser = null, ListenerInterface $listener = null)
     {
-        $this->browser = $browser ?: new Browser(function_exists('curl_exec') ? new Curl() : new FileGetContents());
+        $this->browser = $browser ?: new Browser(\function_exists('curl_exec') ? new Curl() : new FileGetContents());
         $this->browser->addListener($listener ?: new BuzzOAuthListener($token));
     }
 
@@ -70,8 +68,8 @@ class BuzzAdapter implements AdapterInterface
     {
         $headers = [];
 
-        if (is_array($content)) {
-            $content = json_encode($content);
+        if (\is_array($content)) {
+            $content   = \json_encode($content);
             $headers[] = 'Content-Type: application/json';
         }
 
@@ -89,8 +87,8 @@ class BuzzAdapter implements AdapterInterface
     {
         $headers = [];
 
-        if (is_array($content)) {
-            $content = json_encode($content);
+        if (\is_array($content)) {
+            $content   = \json_encode($content);
             $headers[] = 'Content-Type: application/json';
         }
 
@@ -111,9 +109,9 @@ class BuzzAdapter implements AdapterInterface
         }
 
         return [
-            'reset' => (int) $response->getHeader('RateLimit-Reset'),
+            'reset'     => (int) $response->getHeader('RateLimit-Reset'),
             'remaining' => (int) $response->getHeader('RateLimit-Remaining'),
-            'limit' => (int) $response->getHeader('RateLimit-Limit'),
+            'limit'     => (int) $response->getHeader('RateLimit-Limit'),
         ];
     }
 
@@ -141,7 +139,7 @@ class BuzzAdapter implements AdapterInterface
         $body = (string) $response->getContent();
         $code = (int) $response->getStatusCode();
 
-        $content = json_decode($body);
+        $content = \json_decode($body);
 
         throw new HttpException(isset($content->message) ? $content->message : 'Request not processed.', $code);
     }

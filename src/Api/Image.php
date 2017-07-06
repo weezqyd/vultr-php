@@ -1,13 +1,12 @@
 <?php
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\Image as ImageEntity;
@@ -25,15 +24,9 @@ class Image extends AbstractApi
      */
     public function list()
     {
-        $images = $this->adapter->get(sprintf('%s/iso/list', $this->endpoint));
+        $images = $this->adapter->get(\sprintf('%s/iso/list', $this->endpoint));
 
-        $images = json_decode($images);
-
-        $this->extractMeta($images);
-
-        return array_map(function ($image) {
-            return new ImageEntity($image);
-        }, $images);
+        return $this->handleResponse($images, ImageEntity::class, true);
     }
 
     /**
@@ -50,8 +43,8 @@ class Image extends AbstractApi
      */
     public function create($url)
     {
-        $image = $this->adapter->post(sprintf('%s/iso/create_from_url', $this->endpoint), ['url' => $url]);
+        $image = $this->adapter->post(\sprintf('%s/iso/create_from_url', $this->endpoint), ['url' => $url]);
 
-        return json_decode($image);
+        return \json_decode($image);
     }
 }

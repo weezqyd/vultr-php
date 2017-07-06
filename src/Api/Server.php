@@ -1,12 +1,11 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
 namespace Vultr\Api;
 
@@ -24,25 +23,25 @@ use Vultr\Exception\HttpException;
 class Server extends AbstractApi
 {
     /**
-     * @param int $per_page
-     * @param int $page
+     * @param int         $per_page
+     * @param int         $page
      * @param string|null $tag
      *
      * @return DropletEntity[]
      */
     public function list($per_page = 200, $page = 1, $tag = null)
     {
-        $url = sprintf('%s/droplets?per_page=%d&page=%d', $this->endpoint, $per_page, $page);
+        $url = \sprintf('%s/droplets?per_page=%d&page=%d', $this->endpoint, $per_page, $page);
 
         if (null !== $tag) {
-            $url .= '&tag_name='.$tag;
+            $url .= '&tag_name=' . $tag;
         }
 
-        $droplets = json_decode($this->adapter->get($url));
+        $droplets = \json_decode($this->adapter->get($url));
 
         $this->extractMeta($droplets);
 
-        return array_map(function ($droplet) {
+        return \array_map(function ($droplet) {
             return new DropletEntity($droplet);
         }, $droplets->droplets);
     }
@@ -54,11 +53,11 @@ class Server extends AbstractApi
      */
     public function getNeighborsById($id)
     {
-        $droplets = $this->adapter->get(sprintf('%s/droplets/%d/neighbors', $this->endpoint, $id));
+        $droplets = $this->adapter->get(\sprintf('%s/droplets/%d/neighbors', $this->endpoint, $id));
 
-        $droplets = json_decode($droplets);
+        $droplets = \json_decode($droplets);
 
-        return array_map(function ($droplet) {
+        return \array_map(function ($droplet) {
             return new DropletEntity($droplet);
         }, $droplets->droplets);
     }
@@ -68,11 +67,11 @@ class Server extends AbstractApi
      */
     public function getAllNeighbors()
     {
-        $neighbors = $this->adapter->get(sprintf('%s/reports/droplet_neighbors', $this->endpoint));
+        $neighbors = $this->adapter->get(\sprintf('%s/reports/droplet_neighbors', $this->endpoint));
 
-        $neighbors = json_decode($neighbors);
+        $neighbors = \json_decode($neighbors);
 
-        return array_map(function ($neighbor) {
+        return \array_map(function ($neighbor) {
             return new DropletEntity($neighbor);
         }, $neighbors->neighbors);
     }
@@ -82,11 +81,11 @@ class Server extends AbstractApi
      */
     public function getUpgrades()
     {
-        $upgrades = $this->adapter->get(sprintf('%s/droplet_upgrades', $this->endpoint));
+        $upgrades = $this->adapter->get(\sprintf('%s/droplet_upgrades', $this->endpoint));
 
-        $upgrades = json_decode($upgrades);
+        $upgrades = \json_decode($upgrades);
 
-        return array_map(function ($upgrade) {
+        return \array_map(function ($upgrade) {
             return new UpgradeEntity($upgrade);
         }, $upgrades);
     }
@@ -100,19 +99,18 @@ class Server extends AbstractApi
      */
     public function getById($id)
     {
-        $droplet = $this->adapter->get(sprintf('%s/droplets/%d', $this->endpoint, $id));
+        $droplet = $this->adapter->get(\sprintf('%s/droplets/%d', $this->endpoint, $id));
 
-        $droplet = json_decode($droplet);
+        $droplet = \json_decode($droplet);
 
         return new DropletEntity($droplet->droplet);
     }
 
     /**
-     * @param int       $dcId
-     * @param string    $vpsPlanId
-     * @param string    $osId
-     * @param array     $options
-
+     * @param int    $dcId
+     * @param string $vpsPlanId
+     * @param string $osId
+     * @param array  $options
      *
      * @throws HttpException
      *
@@ -120,10 +118,10 @@ class Server extends AbstractApi
      */
     public function create($dcId, $vpsPlanId, $osId, array $options)
     {
-       $content = [
-           'DCID' => $dcId,
+        $content = [
+           'DCID'        => $dcId,
            'vps_plan_id' => $vpsPlanId,
-           'OSID' => $osId,
+           'OSID'        => $osId,
        ];
         $optional = [
             'ipxe_chain_url',
@@ -145,17 +143,16 @@ class Server extends AbstractApi
             'FIREWALLGROUPID',
         ];
         foreach ($optional as $key => $option) {
-            if(array_key_exists($option, $options)){
-                
+            if (\array_key_exists($option, $options)) {
             }
         }
 
-        $droplet = $this->adapter->post(sprintf('%s/droplets', $this->endpoint), $data);
+        $droplet = $this->adapter->post(\sprintf('%s/droplets', $this->endpoint), $data);
 
-        $droplet = json_decode($droplet);
+        $droplet = \json_decode($droplet);
 
-        if (is_array($names)) {
-            return array_map(function ($droplet) {
+        if (\is_array($names)) {
+            return \array_map(function ($droplet) {
                 return new DropletEntity($droplet);
             }, $droplet->droplets);
         }
@@ -170,7 +167,7 @@ class Server extends AbstractApi
      */
     public function delete($id)
     {
-        $this->adapter->delete(sprintf('%s/droplets/%d', $this->endpoint, $id));
+        $this->adapter->delete(\sprintf('%s/droplets/%d', $this->endpoint, $id));
     }
 
     /**
@@ -182,13 +179,13 @@ class Server extends AbstractApi
      */
     public function getAvailableKernels($id)
     {
-        $kernels = $this->adapter->get(sprintf('%s/droplets/%d/kernels', $this->endpoint, $id));
+        $kernels = $this->adapter->get(\sprintf('%s/droplets/%d/kernels', $this->endpoint, $id));
 
-        $kernels = json_decode($kernels);
+        $kernels = \json_decode($kernels);
 
         $this->meta = $this->extractMeta($kernels);
 
-        return array_map(function ($kernel) {
+        return \array_map(function ($kernel) {
             return new KernelEntity($kernel);
         }, $kernels->kernels);
     }
@@ -200,13 +197,13 @@ class Server extends AbstractApi
      */
     public function getSnapshots($id)
     {
-        $snapshots = $this->adapter->get(sprintf('%s/droplets/%d/snapshots?per_page=%d', $this->endpoint, $id, 200));
+        $snapshots = $this->adapter->get(\sprintf('%s/droplets/%d/snapshots?per_page=%d', $this->endpoint, $id, 200));
 
-        $snapshots = json_decode($snapshots);
+        $snapshots = \json_decode($snapshots);
 
         $this->meta = $this->extractMeta($snapshots);
 
-        return array_map(function ($snapshot) {
+        return \array_map(function ($snapshot) {
             $snapshot = new ImageEntity($snapshot);
 
             return $snapshot;
@@ -220,13 +217,13 @@ class Server extends AbstractApi
      */
     public function getBackups($id)
     {
-        $backups = $this->adapter->get(sprintf('%s/droplets/%d/backups?per_page=%d', $this->endpoint, $id, 200));
+        $backups = $this->adapter->get(\sprintf('%s/droplets/%d/backups?per_page=%d', $this->endpoint, $id, 200));
 
-        $backups = json_decode($backups);
+        $backups = \json_decode($backups);
 
         $this->meta = $this->extractMeta($backups);
 
-        return array_map(function ($backup) {
+        return \array_map(function ($backup) {
             return new ImageEntity($backup);
         }, $backups->backups);
     }
@@ -238,13 +235,13 @@ class Server extends AbstractApi
      */
     public function getActions($id)
     {
-        $actions = $this->adapter->get(sprintf('%s/droplets/%d/actions?per_page=%d', $this->endpoint, $id, 200));
+        $actions = $this->adapter->get(\sprintf('%s/droplets/%d/actions?per_page=%d', $this->endpoint, $id, 200));
 
-        $actions = json_decode($actions);
+        $actions = \json_decode($actions);
 
         $this->meta = $this->extractMeta($actions);
 
-        return array_map(function ($action) {
+        return \array_map(function ($action) {
             return new ActionEntity($action);
         }, $actions->actions);
     }
@@ -257,9 +254,9 @@ class Server extends AbstractApi
      */
     public function getActionById($id, $actionId)
     {
-        $action = $this->adapter->get(sprintf('%s/droplets/%d/actions/%d', $this->endpoint, $id, $actionId));
+        $action = $this->adapter->get(\sprintf('%s/droplets/%d/actions/%d', $this->endpoint, $id, $actionId));
 
-        $action = json_decode($action);
+        $action = \json_decode($action);
 
         return new ActionEntity($action->action);
     }
@@ -473,9 +470,9 @@ class Server extends AbstractApi
      */
     private function executeAction($id, array $options)
     {
-        $action = $this->adapter->post(sprintf('%s/droplets/%d/actions', $this->endpoint, $id), $options);
+        $action = $this->adapter->post(\sprintf('%s/droplets/%d/actions', $this->endpoint, $id), $options);
 
-        $action = json_decode($action);
+        $action = \json_decode($action);
 
         return new ActionEntity($action->action);
     }

@@ -1,13 +1,12 @@
 <?php
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Adapter;
 
 use Vultr\Exceptions\HttpException;
@@ -41,7 +40,7 @@ class GuzzleHttpAdapter implements AdapterInterface
      */
     public function __construct($token, ClientInterface $client = null)
     {
-        if (version_compare(ClientInterface::VERSION, '6') === 1) {
+        if (\version_compare(ClientInterface::VERSION, '6') === 1) {
             $this->client = $client ?: new Client(['headers' => ['API-Key' =>$token]]);
         } else {
             $this->client = $client ?: new Client();
@@ -59,7 +58,7 @@ class GuzzleHttpAdapter implements AdapterInterface
             $this->response = $this->client->get($url);
         } catch (RequestException $e) {
             $this->exception = $e;
-            $this->response = $e->getResponse();
+            $this->response  = $e->getResponse();
             $this->handleError();
         }
 
@@ -75,7 +74,7 @@ class GuzzleHttpAdapter implements AdapterInterface
             $this->response = $this->client->delete($url);
         } catch (RequestException $e) {
             $this->exception = $e;
-            $this->response = $e->getResponse();
+            $this->response  = $e->getResponse();
             $this->handleError();
         }
 
@@ -89,13 +88,13 @@ class GuzzleHttpAdapter implements AdapterInterface
     {
         $options = [];
 
-        $options[is_array($content) ? 'json' : 'body'] = $content;
+        $options[\is_array($content) ? 'json' : 'body'] = $content;
 
         try {
             $this->response = $this->client->put($url, $options);
         } catch (RequestException $e) {
             $this->exception = $e;
-            $this->response = $e->getResponse();
+            $this->response  = $e->getResponse();
             $this->handleError();
         }
 
@@ -109,13 +108,13 @@ class GuzzleHttpAdapter implements AdapterInterface
     {
         $options = [];
 
-        $options[is_array($content) ? 'json' : 'body'] = $content;
+        $options[\is_array($content) ? 'json' : 'body'] = $content;
 
         try {
             $this->response = $this->client->post($url, $options);
         } catch (RequestException $e) {
             $this->exception = $e;
-            $this->response = $e->getResponse();
+            $this->response  = $e->getResponse();
             $this->handleError();
         }
 
@@ -132,9 +131,9 @@ class GuzzleHttpAdapter implements AdapterInterface
         }
 
         return [
-            'reset' => (int) (string) $this->response->getHeader('RateLimit-Reset'),
+            'reset'     => (int) (string) $this->response->getHeader('RateLimit-Reset'),
             'remaining' => (int) (string) $this->response->getHeader('RateLimit-Remaining'),
-            'limit' => (int) (string) $this->response->getHeader('RateLimit-Limit'),
+            'limit'     => (int) (string) $this->response->getHeader('RateLimit-Limit'),
         ];
     }
 
@@ -149,7 +148,7 @@ class GuzzleHttpAdapter implements AdapterInterface
         $body = (string) $this->response->getBody();
         $code = (int) $this->response->getStatusCode();
 
-        $content = json_decode($body);
+        $content = \json_decode($body);
 
         throw new HttpException(isset($content->message) ? $content->message : $this->exception->getMessage(), $code);
     }

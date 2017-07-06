@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\FirewallGroup as FirewallGroupEntity;
@@ -27,8 +25,8 @@ class FirewallGroup extends AbstractApi
     public function list()
     {
         $response = $this->getAny();
-        
-        return $this->handleResponse($response, FirewallGroup::class, true);
+
+        return $this->handleResponse($response, self::class, true);
     }
 
     /**
@@ -43,7 +41,7 @@ class FirewallGroup extends AbstractApi
     public function getById($groupId)
     {
         $response = $this->getAny($groupId);
-        $object = json_decode($response);
+        $object   = \json_decode($response);
         try {
             $group = $object->$groupId;
         } catch (\Exception $e) {
@@ -64,7 +62,7 @@ class FirewallGroup extends AbstractApi
     {
         $params = null !== $groupId ? '?FIREWALLGROUPID=%s' : '';
 
-        return $this->adapter->get(sprintf('%s/firewall/group_list'.$params, $this->endpoint, $groupId));
+        return $this->adapter->get(\sprintf('%s/firewall/group_list' . $params, $this->endpoint, $groupId));
     }
 
     /**
@@ -76,8 +74,8 @@ class FirewallGroup extends AbstractApi
      **/
     public function create($description = null)
     {
-        $response = $this->adapter->post(sprintf('%s/firewall/group_create', $this->endpoint), compact('description'));
-        $object = json_decode($response);
+        $response = $this->adapter->post(\sprintf('%s/firewall/group_create', $this->endpoint), \compact('description'));
+        $object   = \json_decode($response);
 
         return $this->getById($object->FIREWALLGROUPID);
     }
@@ -94,9 +92,9 @@ class FirewallGroup extends AbstractApi
     {
         $data = [
             'FIREWALLGROUPID' => $groupId,
-            'description' => $description,
+            'description'     => $description,
         ];
-        $this->adapter->post(sprintf('%s/firewall/group_set_description', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/firewall/group_set_description', $this->endpoint), $data);
     }
 
     /**
@@ -115,6 +113,6 @@ class FirewallGroup extends AbstractApi
         $data = [
             'FIREWALLGROUPID' => $groupId,
         ];
-        $this->adapter->post(sprintf('%s/firewall/group_delete', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/firewall/group_delete', $this->endpoint), $data);
     }
 }

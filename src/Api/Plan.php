@@ -1,13 +1,12 @@
 <?php
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\Plan as PlanEntity;
@@ -28,7 +27,7 @@ class Plan extends AbstractApi
      */
     public function list($type = 'all')
     {
-        $response = $this->adapter->get(sprintf('%s/plans/list?type=%s', $this->endpoint, $type));
+        $response = $this->adapter->get(\sprintf('%s/plans/list?type=%s', $this->endpoint, $type));
 
         return $this->handleResponse($response, PlanEntity::class, true);
     }

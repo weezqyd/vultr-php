@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\DomainRecord as DomainRecordEntity;
@@ -30,7 +28,7 @@ class DomainRecord extends AbstractApi
      */
     public function list($domain)
     {
-        $domainRecords = $this->adapter->get(sprintf('%s/dns/records?domain=%s', $this->endpoint, $domain));
+        $domainRecords = $this->adapter->get(\sprintf('%s/dns/records?domain=%s', $this->endpoint, $domain));
 
         return $this->handleResponse($domainRecords, DomainRecordEntity::class, true);
     }
@@ -49,7 +47,7 @@ class DomainRecord extends AbstractApi
      */
     public function create($domain, $type, $name, $data, $priority = null, $ttl = null)
     {
-        switch ($type = strtoupper($type)) {
+        switch ($type = \strtoupper($type)) {
             case 'A':
             case 'AAAA':
             case 'CNAME':
@@ -64,9 +62,9 @@ class DomainRecord extends AbstractApi
             case 'SRV':
             case 'MX':
                 $content = [
-                    'name' => $name,
-                    'type' => $type,
-                    'data' => $data,
+                    'name'     => $name,
+                    'type'     => $type,
+                    'data'     => $data,
                     'priority' => (int) $priority,
                 ];
                 break;
@@ -78,7 +76,7 @@ class DomainRecord extends AbstractApi
         if (null !== $ttl) {
             $content['ttl'] = $ttl;
         }
-        $domainRecord = $this->adapter->post(sprintf('%s/dns/create_record', $this->endpoint), $content);
+        $domainRecord = $this->adapter->post(\sprintf('%s/dns/create_record', $this->endpoint), $content);
     }
 
     /**
@@ -95,13 +93,13 @@ class DomainRecord extends AbstractApi
      */
     public function update($domain, $recordId, $name = null, $data = null, $priority = null, $ttl = null)
     {
-        $content = compact('name', 'data', 'priority', 'ttl', 'domain');
-        $content = array_filter($content, function ($val) {
+        $content = \compact('name', 'data', 'priority', 'ttl', 'domain');
+        $content = \array_filter($content, function ($val) {
             return $val !== null;
         });
         $content['RECORDID'] = $recordId;
 
-        $this->adapter->post(sprintf('%s/dns/update_record', $this->endpoint), $content);
+        $this->adapter->post(\sprintf('%s/dns/update_record', $this->endpoint), $content);
     }
 
     /**
@@ -115,9 +113,9 @@ class DomainRecord extends AbstractApi
     public function delete($domain, $recordId)
     {
         $data = [
-            'domain' => $domain,
+            'domain'   => $domain,
             'RECORDID' => $recordId,
         ];
-        $this->adapter->post(sprintf('%s/dns/delete_record', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/dns/delete_record', $this->endpoint), $data);
     }
 }

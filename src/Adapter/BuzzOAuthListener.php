@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Adapter;
 
 use Buzz\Listener\ListenerInterface;
@@ -40,7 +38,7 @@ class BuzzOAuthListener implements ListenerInterface
      */
     public function preSend(RequestInterface $request)
     {
-        $request->addHeader(sprintf('Authorization: Bearer %s', $this->token));
+        $request->addHeader(\sprintf('Authorization: Bearer %s', $this->token));
     }
 
     /**

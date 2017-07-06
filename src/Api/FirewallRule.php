@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\FirewallRule as FirewallRuleEntity;
@@ -27,8 +25,8 @@ class FirewallRule extends AbstractApi
      */
     public function list($groupId, $direction, $ipType)
     {
-        $params = 'FIREWALLGROUPID=%s&direction=%s&ip_type=%s';
-        $response = $this->adapter->get(sprintf('%s/firewall/rule_list'.$params, $this->endpoint, $groupId, $direction, $ipType));
+        $params   = 'FIREWALLGROUPID=%s&direction=%s&ip_type=%s';
+        $response = $this->adapter->get(\sprintf('%s/firewall/rule_list' . $params, $this->endpoint, $groupId, $direction, $ipType));
 
         return $this->handleResponse($response, self::class, true);
     }
@@ -50,19 +48,19 @@ class FirewallRule extends AbstractApi
     {
         $content = [
             'FIREWALLGROUPID' => $groupId,
-            'direction' => $direction,
-            'ip_type' => $ipType,
-            'protocol' => $protocol,
-            'subnet' => $subnet,
-            'subnet_size' => $subnetSize,
+            'direction'       => $direction,
+            'ip_type'         => $ipType,
+            'protocol'        => $protocol,
+            'subnet'          => $subnet,
+            'subnet_size'     => $subnetSize,
         ];
         if (null !== $port) {
             $content['port'] = $port;
         }
 
-        $response = $this->adapter->post(sprintf('%s/firewall/rule_create', $this->endpoint), $content);
+        $response = $this->adapter->post(\sprintf('%s/firewall/rule_create', $this->endpoint), $content);
 
-        return json_decode($response);
+        return \json_decode($response);
     }
 
     /**
@@ -77,8 +75,8 @@ class FirewallRule extends AbstractApi
     {
         $data = [
             'FIREWALLGROUPID' => $groupId,
-            'rulenumber' => $ruleNumber,
+            'rulenumber'      => $ruleNumber,
         ];
-        $this->adapter->post(sprintf('%s/firewall/rule_delete', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/firewall/rule_delete', $this->endpoint), $data);
     }
 }

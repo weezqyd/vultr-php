@@ -1,4 +1,3 @@
 vendor/
 env.ini
-init.php
-output/
+.php_cs.cache

@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Support;
 
 /**
@@ -28,7 +26,7 @@ trait Str
         }
 
         $date = new \DateTime($date);
-        $date->setTimezone(new \DateTimeZone(date_default_timezone_get()));
+        $date->setTimezone(new \DateTimeZone(\date_default_timezone_get()));
 
         return $date->format(\DateTime::ISO8601);
     }
@@ -42,7 +40,7 @@ trait Str
     {
         $string =  static::studly($str);
 
-        return lcfirst($string);
+        return \lcfirst($string);
     }
 
     /**
@@ -54,8 +52,8 @@ trait Str
      */
     public static function studly($value)
     {
-        $value = ucwords(str_replace(['-', '_'], ' ', strtolower($value)));
+        $value = \ucwords(\str_replace(['-', '_'], ' ', \strtolower($value)));
 
-        return str_replace(' ', '', $value);
+        return \str_replace(' ', '', $value);
     }
 }

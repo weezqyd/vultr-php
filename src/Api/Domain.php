@@ -1,14 +1,12 @@
 <?php
-
 /*
- * This file is part of the Vultr PHP library.
+ *   This file is part of the Vultr PHP library.
  *
- * (c) Albert Leitato <wizqydy@gmail.com>
+ *   (c) Albert Leitato <wizqydy@gmail.com>
  *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
+ *   For the full copyright and license information, please view the LICENSE
+ *   file that was distributed with this source code.
  */
-
 namespace Vultr\Api;
 
 use Vultr\Entity\Domain as DomainEntity;
@@ -26,7 +24,7 @@ class Domain extends AbstractApi
      */
     public function list()
     {
-        $domains = $this->adapter->get(sprintf('%s/dns/list', $this->endpoint));
+        $domains = $this->adapter->get(\sprintf('%s/dns/list', $this->endpoint));
 
         return $this->heanleResponse($domains, DomainEntity::class, true);
     }
@@ -45,9 +43,9 @@ class Domain extends AbstractApi
     {
         $content = ['name' => $name, 'serverip' => $ipAddress];
 
-        $domain = $this->adapter->post(sprintf('%s/dns/create_domain', $this->endpoint), $content);
+        $domain = $this->adapter->post(\sprintf('%s/dns/create_domain', $this->endpoint), $content);
 
-        $domain = json_decode($domain);
+        $domain = \json_decode($domain);
 
         return new DomainEntity($domain->domain);
     }
@@ -61,6 +59,6 @@ class Domain extends AbstractApi
      */
     public function delete($domain)
     {
-        $this->adapter->post(sprintf('%s/dns/delete_domain', $this->endpoint), compact('domain'));
+        $this->adapter->post(\sprintf('%s/dns/delete_domain', $this->endpoint), \compact('domain'));
     }
 }
