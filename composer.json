@@ -15,7 +15,8 @@
     },
 
     "require": {
-        "php": ">=7.0"
+        "php": ">=7.0",
+        "weezqyd/http-adapters": "^0.0.1"
     },
 
     "require-dev": {

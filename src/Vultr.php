@@ -7,6 +7,7 @@
  *   For the full copyright and license information, please view the LICENSE
  *   file that was distributed with this source code.
  */
+
 namespace Vultr;
 
 /*
@@ -20,7 +21,9 @@ namespace Vultr;
  * @see     https://github.com/weezqyd/vultr-php
  */
 
-use Vultr\Adapter\AdapterInterface;
+use Http\Exceptions;
+use Http\Adapter\GuzzleHttpAdapter;
+use Http\Adapter\AdapterInterface;
 
 class Vultr
 {
@@ -38,9 +41,9 @@ class Vultr
      *
      * @param AdapterInterface $adapter
      */
-    public function __construct(AdapterInterface $adapter)
+    public function __construct($token, AdapterInterface $adapter = null)
     {
-        $this->adapter = $adapter;
+        $this->createAdapter($adapter, $token);
     }
 
     /**
@@ -63,10 +66,52 @@ class Vultr
     protected function getClass($class)
     {
         $resource = static::studly($class);
-        $class    = 'Vultr\\Api\\' . $resource;
+        $class = 'Vultr\\Api\\'.$resource;
         if (\class_exists($class)) {
             return new $class($this->adapter);
         }
         throw new Exceptions\ErrorException("The class $class does not exist");
+    }
+
+    /**
+     * Set the default client adapter.
+     *
+     * @param \Http\Adapter\AdapterInterface $adapter
+     **/
+    public function setClient(AdapterInterface $adapter)
+    {
+        $this->adapter = $adapter;
+    }
+
+    /**
+     * Set up the Guzzle adapter.
+     *
+     * @param string $token Api Token
+     **/
+    protected function createGuzzleAdapter($token)
+    {
+        $options = ['headers' => [
+                        'API-Key' => $token,
+                        'Accept' => 'application/json',
+                        'Content-Type' => 'application/x-www-form-urlencoded',
+                    ],
+                ];
+        $adapter = new GuzzleHttpAdapter($options);
+        $this->setClient($adapter);
+    }
+
+    /**
+     * Create a client adapter.
+     *
+     * @param Http\Adapter\AdapterInterface|null $adapter
+     * @param string|null                        $token   API Token
+     **/
+    protected function createAdapter($adapter, $token = null)
+    {
+        if ($adapter instanceof AdapterInterface) {
+            $this->setClient($adapter);
+        } else {
+            $this->createGuzzleAdapter($token);
+        }
     }
 }

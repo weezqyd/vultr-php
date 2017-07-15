@@ -52,21 +52,16 @@ class DomainRecord extends AbstractApi
             case 'AAAA':
             case 'CNAME':
             case 'TXT':
-                $content = ['name' => $name, 'type' => $type, 'data' => $data];
+                $content = compact('type', 'data', 'name');
                 break;
 
             case 'NS':
-                $content = ['type' => $type, 'data' => $data];
+                $content = compact('type', 'data');
                 break;
 
             case 'SRV':
             case 'MX':
-                $content = [
-                    'name'     => $name,
-                    'type'     => $type,
-                    'data'     => $data,
-                    'priority' => (int) $priority,
-                ];
+                $content = compact('type', 'data', 'name', 'priority');
                 break;
 
             default:
@@ -76,7 +71,8 @@ class DomainRecord extends AbstractApi
         if (null !== $ttl) {
             $content['ttl'] = $ttl;
         }
-        $this->adapter->post(\sprintf('%s/dns/create_record', $this->endpoint), $content);
+
+        return $this->adapter->post(sprintf('%s/dns/create_record', $this->endpoint), http_build_query($content));
     }
 
     /**

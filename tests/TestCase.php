@@ -11,7 +11,7 @@ namespace Vultr\Tests;
 
 use Mockery;
 use Vultr\Vultr;
-use Vultr\Adapter\AdapterInterface;
+use Http\Adapter\AdapterInterface;
 use PHPUnit\Framework\TestCase as PHPUnit;
 
 abstract class TestCase extends PHPUnit
@@ -20,7 +20,7 @@ abstract class TestCase extends PHPUnit
 
     public function setUp()
     {
-        $this->vultr = new Vultr(Mockery::mock(AdapterInterface::class));
+        $this->vultr = new Vultr('', Mockery::mock(AdapterInterface::class));
     }
 
     public function tearDown()

@@ -9,7 +9,7 @@
  */
 namespace Vultr\Api;
 
-use Vultr\Adapter\AdapterInterface;
+use Http\Adapter\AdapterInterface;
 use Vultr\Entity\Meta;
 
 /**
