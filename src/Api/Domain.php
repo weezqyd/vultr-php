@@ -43,7 +43,7 @@ class Domain extends AbstractApi
     {
         $content = ['name' => $name, 'serverip' => $ipAddress];
 
-        $domain = $this->adapter->post(\sprintf('%s/dns/create_domain', $this->endpoint), $content);
+        $domain = $this->adapter->post(\sprintf('%s/dns/create_domain', $this->endpoint), http_build_query($content));
 
         $domain = \json_decode($domain);
 
@@ -59,6 +59,6 @@ class Domain extends AbstractApi
      */
     public function delete($domain)
     {
-        $this->adapter->post(\sprintf('%s/dns/delete_domain', $this->endpoint), \compact('domain'));
+        $this->adapter->post(\sprintf('%s/dns/delete_domain', $this->endpoint), http_build_query(compact('domain')));
     }
 }

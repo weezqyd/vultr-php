@@ -14,8 +14,7 @@ use Vultr\Exceptions\HttpException;
 use Vultr\Exceptions\InvalidRecordException;
 
 /**
- * @author Yassir Hannoun <yassir.hannoun@gmail.com>
- * @author Graham Campbell <graham@alt-three.com>
+ * @author Albert Leitato <wizqydy@gmail.com>
  */
 class DomainRecord extends AbstractApi
 {
@@ -95,7 +94,7 @@ class DomainRecord extends AbstractApi
         });
         $content['RECORDID'] = $recordId;
 
-        $this->adapter->post(\sprintf('%s/dns/update_record', $this->endpoint), $content);
+        $this->adapter->post(\sprintf('%s/dns/update_record', $this->endpoint), http_build_query($content));
     }
 
     /**
@@ -112,6 +111,6 @@ class DomainRecord extends AbstractApi
             'domain'   => $domain,
             'RECORDID' => $recordId,
         ];
-        $this->adapter->post(\sprintf('%s/dns/delete_record', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/dns/delete_record', $this->endpoint), http_build_query($data));
     }
 }

@@ -62,7 +62,7 @@ class Block extends AbstractApi
         if (!empty($label)) {
             $data['label'] = $label;
         }
-        $response = $this->adapter->post(\sprintf('%s/block/create', $this->endpoint), $data);
+        $response = $this->adapter->post(\sprintf('%s/block/create', $this->endpoint), http_build_query($data));
 
         return \json_decode($response);
     }
@@ -78,7 +78,7 @@ class Block extends AbstractApi
      */
     public function delete($subid)
     {
-        $this->adapter->post(\sprintf('%s/block/delete', $this->endpoint), ['SUBID' => $subid]);
+        $this->adapter->post(\sprintf('%s/block/delete', $this->endpoint), http_build_query(['SUBID' => $subid]));
     }
 
     /**
@@ -90,7 +90,7 @@ class Block extends AbstractApi
      */
     public function detach($subid)
     {
-        $this->adapter->post(\sprintf('%s/block/detach', $this->endpoint), ['SUBID' => $subid]);
+        $this->adapter->post(\sprintf('%s/block/detach', $this->endpoint), http_build_query(['SUBID' => $subid]));
     }
 
     /**
@@ -107,7 +107,7 @@ class Block extends AbstractApi
             'SUBID' => $subid,
             'label' => $label,
         ];
-        $this->adapter->post(\sprintf('%s/block/label_set', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/block/label_set', $this->endpoint), http_build_query($data));
     }
 
     /**
@@ -128,6 +128,6 @@ class Block extends AbstractApi
             'SUBID'   => $subid,
             'size_gb' => $size,
         ];
-        $this->adapter->post(\sprintf('%s/block/resize', $this->endpoint), $data);
+        $this->adapter->post(\sprintf('%s/block/resize', $this->endpoint), http_build_query($data));
     }
 }
